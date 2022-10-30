@@ -117,7 +117,7 @@ async def start(msg: types.Message):
             href_to_chanel = f"\nОдноразовая ссылка не требуется"
 
     main_photo_id = 'AgACAgIAAxkBAAICzGNY2kZPSsLqObVUgtH7DZwZ8fitAAIlwDEb2ojISpNdWipkecjhAQADAgADcwADKgQ'
-    await bot.send_photo(msg.from_user.id, photo=main_photo_id, caption=f"Здравствуйте, {msg.from_user.first_name}\n\n"
+    await bot.send_photo(msg.from_user.id, photo=main_photo_id, caption=f"!)Здравствуйте, {msg.from_user.first_name}\n\n"
                                                                         f"Ваш баланс: {balance} руб.\n"
                                                                         f"{user_sub}\n"
                                                                         f"{user_ref_link}"
