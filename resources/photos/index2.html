@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        :root {
+            --dark-80: #000;
+            --white-100: #FFFFFF;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .overlay-black {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--dark-80);
+        }
+
+
+        .header {
+            display: flex;
+            padding: 20px 10%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav > ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .content_center {
+            display: flex;
+            padding: 10px 10%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav_item__link {
+            position: relative;
+            text-decoration: none;
+            color: var(--white-100);
+            font-size: 16px;
+            font-weight: 400 !important;
+            opacity: 0.7;
+            font-family: Monsterrat, Calibri;
+        }
+
+        .nav_item__link::after {
+            position: absolute;
+            width: 0;
+            left: 50%;
+            bottom: -5px;
+            transform: translateX(-50%);
+            content: '';
+            border-radius: 4px;
+            height: 2px;
+            transition: width .3s ease-in-out;
+            will-change: width;
+            background-color: var(--white-100);
+        }
+
+        .nav_item__link:hover::after {
+            width: 100%;
+        }
+
+        .top_title {
+            color: var(--white-100);
+        }
+
+        .top_title > h2 {
+            font-size: 45px;
+            font-weight: 700;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        .name{
+            display: block;
+            font-size: calc(20px + 4vw);
+            font-weight: 700;
+            color: var(--white-100);
+        }
+        .professions{
+            display: flex;
+            gap: 10px;
+            color: var(--white-100);
+        }
+        .btn_blue{
+            padding: 3px 12px;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 20px;
+            background-color: #1378EF;
+            transition: all .3s ease-in-out;
+        }
+        .btn_blue:hover{
+            background: #eee;
+            color: #1378EF;
+        }
+        .portfolio{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .all_years_block{
+            padding: 7% 10%;
+            justify-content: space-between;
+            gap: 20px;
+            color: var(--white-100);
+        }
+        .three_years_block{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6%;
+        }
+        .year{
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+            justify-content: center;
+        }
+        .year_title{
+            position: relative;
+            font-size: 25px;
+            font-weight: 700;
+            display: inline;
+        }
+        .year_title::after{
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: calc(25*3px);
+            height: 1px;
+            border-radius: 5px;
+            content: '';
+            background-color: var(--white-100);
+        }
+        .year>span{
+            font-size: 12px;
+            font-family: Bahnschrift;
+        }
+    </style>
+</head>
+<body>
+<main class="overlay-black">
+    <header class="header">
+        <div class="top_title">
+            <h2>Portfolio</h2>
+            <span>Web developer</span>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li class="nav_item"><a href="#" class="nav_item__link">About</a></li>
+                <li class="nav_item"><a href="#" class="nav_item__link">Projects</a></li>
+                <li class="nav_item"><a href="#" class="nav_item__link">Reviews</a></li>
+                <li class="nav_item"><a href="#" class="nav_item__link">Contacts</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="main_section content_center">
+        <div class="portfolio">
+            <div class="names">
+                <div class="name">Michael</div>
+                <div class="name">Scofield</div>
+            </div>
+            <div class="subtitle">
+                <span style="color: var(--white-100);font-size: calc(12px + 1vw);">Fullstack web developer</span>
+            </div>
+            <div class="all_stack">
+                <div class="professions">
+                    <div class="btn_blue" style="margin-bottom: 10px;">UI/UX Design</div>
+                    <div class="btn_blue" style="margin-bottom: 10px;">QA Testing</div></div>
+                <div class="professions">
+                    <div class="btn_blue">Mobile Apps</div>
+                    <div class="btn_blue">Web development</div>
+                </div>
+            </div>
+        </div>
+        <canvas id="canvasOne" width="900" height="520">
+            Your browser does not support HTML5 canvas.
+        </canvas>
+        <script src="main.js"></script>
+    </section>
+    <section style="background-color: var(--dark-80)" class="dev_history_block">
+        <div class="all_years_block">
+            <div class="three_years_block">
+                <div class="year">
+                    <div class="year_title">2015</div>
+                    <span class="year_text">First project. Blog for the teacher</span>
+                </div>
+                <div class="year">
+                    <div class="year_title">2016</div>
+                    <span class="year_text">Development of the first mobile application</span>
+                </div>
+                <div class="year">
+                    <div class="year_title">2017</div>
+                    <span class="year_text">The portfolio includes over 100 projects</span>
+                </div>
+            </div>
+            <div class="three_years_block">
+                <div class="year">
+                    <div class="year_title">2018</div>
+                    <span class="year_text">First international project</span>
+                </div>
+                <div class="year">
+                    <div class="year_title">2019</div>
+                    <span class="year_text">Launching a personal web development course</span>
+                </div>
+                <div class="year">
+                    <div class="year_title">2020</div>
+                    <span class="year_text">Started working in Google</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
