@@ -11,7 +11,7 @@ BOT_TOKEN = '5426371103:AAHxzZ4or1O9sIRPpegcx_mCB76R1a0t6OM'
 
 bot = Bot(BOT_TOKEN, parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
-db = Database('database.db')
+db = Database()
 
 server = Flask(__name__)
 logger = aiogram.dispatcher.middlewares.log

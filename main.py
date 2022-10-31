@@ -507,6 +507,5 @@ def redirect_message(req):
 
 
 if __name__ == '__main__':
-    bot.delete_webhook()
-    bot.set_webhook(url=APP_URL)
-    server.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    with db.connection:
+        executor.start_polling(dp, skip_updates=True)
