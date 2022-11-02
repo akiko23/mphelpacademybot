@@ -36,7 +36,6 @@ async def always_update_sub_time(msg: types.Message, text, keyb):
 @dp.message_handler(CommandStart())
 async def start(msg: types.Message):
     user_id = str(msg.from_user.id)
-
     db.add_user(msg.from_user.id) if not db.user_exists(user_id) and \
                                      not db.user_exists_in_any_cool_table(user_id) else None
 
@@ -117,27 +116,46 @@ async def start(msg: types.Message):
             href_to_chanel = f"\nОдноразовая ссылка не требуется"
 
     main_photo_id = 'AgACAgIAAxkBAAICzGNY2kZPSsLqObVUgtH7DZwZ8fitAAIlwDEb2ojISpNdWipkecjhAQADAgADcwADKgQ'
-    await bot.send_photo(msg.from_user.id, photo=main_photo_id, caption=f"!)Здравствуйте, {msg.from_user.first_name}\n\n"
-                                                                        f"Ваш баланс: {balance} руб.\n"
-                                                                        f"{user_sub}\n"
-                                                                        f"{user_ref_link}"
-                                                                        f"{href_to_chanel}"
+    await bot.send_photo(msg.from_user.id, photo=main_photo_id,
+                         caption=f"!)Здравствуйте, {msg.from_user.first_name}\n\n"
+                                 f"Ваш баланс: {balance} руб.\n"
+                                 f"{user_sub}\n"
+                                 f"{user_ref_link}"
+                                 f"{href_to_chanel}"
 
                          , reply_markup=menu_keyb)
 
-    await remind_on_last_days_ofsub(msg)
-    await remind_after_hour(msg)
-    await remind_after_day(msg)
+    unreminded_users_after_hour = db.get_unreminded_users_after_hour()
+    unreminded_users_after_day = db.get_unreminded_users_after_day()
+
+    users_with_almost_missed_sub = db.get_users_with_almost_missed_sub()
+    users_with_missed_sub = db.get_users_with_missed_sub()
+
+    if any([unreminded_users_after_hour, users_with_almost_missed_sub, users_with_missed_sub,
+            unreminded_users_after_day]):
+        await remind_on_last_days_ofsub(users_with_almost_missed_sub,
+                                        users_with_missed_sub) if unreminded_users_after_day or unreminded_users_after_hour else None
+        await remind_after_hour(unreminded_users_after_hour) if unreminded_users_after_hour else None
+        await remind_after_day(unreminded_users_after_day) if unreminded_users_after_day else None
 
 
 @dp.callback_query_handler(Text('sub'))
 async def subscription(call: types.CallbackQuery):
     if db.get_sub_status(call.from_user.id) is False:
-        await call.message.edit_caption(
-            caption='Подписка открывает доступ к приватной группе, а также к функциям, который на данный момент не доступны!\n'
-                    '\nЦена подписки - 500 рублей\n'
-                    'Будет действовать - 30 дней\n\n',
-            reply_markup=markups.onSubpay_menu(call.from_user.id))
+        try:
+            await call.message.edit_caption(
+                caption='Подписка открывает доступ к приватной группе, а также к функциям, который на данный момент '
+                        'не доступны!\n '
+                        '\nЦена подписки - 500 рублей\n'
+                        'Будет действовать - 30 дней\n\n',
+                reply_markup=markups.onSubpay_menu(call.from_user.id))
+        except:
+            await call.message.edit_text(
+                text='Подписка открывает доступ к приватной группе, а также к функциям, который на данный момент не '
+                     'доступны!\n '
+                        '\nЦена подписки - 500 рублей\n'
+                        'Будет действовать - 30 дней\n\n',
+                reply_markup=markups.onSubpay_menu(call.from_user.id))
     else:
         invite_link = db.get_user_attr(call.from_user.id, 'subLink')
         await call.message.edit_caption(caption=f"Подписка уже оформлена. До конца осталось: "
@@ -283,7 +301,6 @@ async def back_to_main_menu(call: types.CallbackQuery):
                 else ''
         except:
             href_to_chanel = f"\nОдноразовая ссылка в закрытый канал не требуется"
-
     try:
         menu_keyb = markups.after_subscription_main_menu(call.from_user.id) if db.get_sub_status(
             call.from_user.id) or str(
@@ -506,6 +523,12 @@ def redirect_message(req):
     return ":", 200
 
 
+def main(func):
+    func()
+
+
 if __name__ == '__main__':
     with db.connection:
-        executor.start_polling(dp, skip_updates=True)
+        bot.delete_webhook()
+        bot.set_webhook(url=APP_URL)
+        server.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

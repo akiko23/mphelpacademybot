@@ -19,7 +19,8 @@ async def processing_whole_change_process(call):
         keyb = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text='Название/Имя', callback_data=f'chng_param-name-{unique_id}-{service_name}'),
+                    InlineKeyboardButton(text='Название/Имя',
+                                         callback_data=f'chng_param-name-{unique_id}-{service_name}'),
                     InlineKeyboardButton(text='Описание/О себе',
                                          callback_data=f'chng_param-description-{unique_id}-{service_name}')
                 ],
@@ -61,7 +62,7 @@ async def change_definite_param(callback: types.CallbackQuery):
     try:
         name, desc, contact = db.get_definite_column_data(service_name, unique_id)[1:]
 
-        with open('current_user_change_data.json', 'w', encoding='utf-8') as f:
+        with open('current_admin_change_data.json', 'w', encoding='utf-8') as f:
             json.dump(res, f, indent=4, ensure_ascii=False)
 
         await bot.send_message(callback.from_user.id, f'Введите новое значение\n\n\n'
@@ -73,7 +74,7 @@ async def change_definite_param(callback: types.CallbackQuery):
     except ValueError:
         question, answer = db.get_definite_column_data(service_name, unique_id)[1:]
 
-        with open('current_user_change_data.json', 'w', encoding='utf-8') as f:
+        with open('current_admin_change_data.json', 'w', encoding='utf-8') as f:
             json.dump(res, f, indent=4, ensure_ascii=False)
 
         await bot.send_message(callback.from_user.id, f'Введите новое значение\n\n\n'
@@ -89,7 +90,7 @@ async def change_definite_param(callback: types.CallbackQuery):
 async def get_valueOnChange(msg: types.Message, state: FSMContext):
     await bot.delete_message(msg.from_user.id, msg.message_id - 1)
 
-    with open('current_user_change_data.json', 'r', encoding='utf-8') as f:
+    with open('current_admin_change_data.json', 'r', encoding='utf-8') as f:
         param_to_change, service_name, unique_id = json.load(f)["data"]
 
     value = msg.text
@@ -108,5 +109,5 @@ async def get_valueOnChange(msg: types.Message, state: FSMContext):
 async def watch_managers(call: types.CallbackQuery):
     await bot.delete_message(message_id=call.message.message_id, chat_id=call.from_user.id)
     await bot.send_message(call.from_user.id, f'Выберите менеджера.\n'
-                                              f'Ссылка для добавления новых менеджеров: {await get_start_link(payload="add_manager-kpmwrhnmwbi2ejgi2hbjbknwnrkhrho24")}', reply_markup=markups.get_managers())
-
+                                              f'Ссылка для добавления новых менеджеров: {await get_start_link(payload="add_manager-kpmwrhnmwbi2ejgi2hbjbknwnrkhrho24")}',
+                           reply_markup=markups.get_managers())

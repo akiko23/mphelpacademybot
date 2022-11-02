@@ -129,12 +129,12 @@ class Database:
         self.request_to_database("SELECT * FROM users WHERE subtime=0")
         all_users_without_sub = self.cursor.fetchall()
 
-        return [user[1] for user in all_users_without_sub if 8200 >= (int(time.time()) - int(user[9])) >= 3600]
+        return [user[0] for user in all_users_without_sub if 8200 >= (int(time.time()) - int(user[9])) >= 3600]
 
     def get_unreminded_users_after_day(self):
         self.request_to_database("SELECT * FROM users WHERE subtime=0")
         all_users_without_sub = self.cursor.fetchall()
-        return [user[1] for user in all_users_without_sub if (int(time.time()) - int(user[9])) >= 86400]
+        return [user[0] for user in all_users_without_sub if (int(time.time()) - int(user[9])) >= 86400]
 
     def update_invited_users(self, table, inviter_id, new_user_id):
         try:
@@ -177,9 +177,15 @@ class Database:
 
     def get_check(self, bill_id):
         self.request_to_database(f"""SELECT * FROM "check" WHERE bill_id='{bill_id}'""")
-        if not bool(len(self.cursor.fetchmany(1))):
+        res = self.cursor.fetchmany(1)
+        if not bool(len(res)):
             return False
-        return self.cursor.fetchmany(1)[0]
+        return res[0]
 
     def delete_check(self, bill_id):
         self.request_to_database(f"""DELETE FROM "check" WHERE bill_id='{bill_id}'""")
+
+
+# db = Database()
+# print(db.get_unreminded_users_after_day())
+print(time.time() - 1667293888)
