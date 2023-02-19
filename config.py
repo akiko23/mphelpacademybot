@@ -3,8 +3,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from db import Database
 from pyqiwip2p import QiwiP2P
-import os
-import logging
+import os, logging
 from flask import Flask, request
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
